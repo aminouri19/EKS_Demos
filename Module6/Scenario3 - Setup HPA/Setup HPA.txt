@@ -1,0 +1,25 @@
+Setup Horizontal Pod Autoscaling
+
+1- Deploy a simple Apache web server application
+*	kubectl apply -f https://k8s.io/examples/application/php-apache.yaml
+
+2- Create a Horizontal Pod Autoscaler resource for the php-apache deployment.
+*	kubectl autoscale deployment php-apache --cpu-percent=50 --min=1 --max=10
+
+3- Describe the autoscaler with the following command to view its details.
+*	kubectl describe hpa
+
+4- Create load for the webserver by running a container
+*	kubectl run -it --rm load-generator --image=busybox /bin/sh --generator=run-pod/v1
+
+5- Run the following command in the terminal to increase CPU usage
+*	while true; do wget -q -O- http://php-apache; done
+
+6- Watch the deployment scale out
+*	kubectl get hpa
+
+7- Exit the container to reduce the load and watch the hpa scale back in
+
+8- Delete the deployment
+*	kubectl delete deployment.apps/php-apache service/php-apache
+

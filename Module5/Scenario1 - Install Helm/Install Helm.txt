@@ -1,0 +1,23 @@
+Installing Helm
+
+1- Download package
+*	wget https://get.helm.sh/helm-v3.5.1-linux-amd64.tar.gz
+
+2- Extract the file
+*	tar -zxvf helm-v3.5.1-linux-amd64.tar.gz
+
+3- Copy to proper desitnation
+*	sudo mv linux-amd64/helm /usr/local/bin/helm
+
+4- Add repository for Helm
+*	helm repo add stable https://charts.helm.sh/stable
+
+
+-----------
+Fixing warning messages:
+If the following warning messages popup, fix permissions using the following commands
+*	WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/ec2-user/.kube/config
+
+*	chmod o-r ~/.kube/config
+*	chmod g-r ~/.kube/config
+

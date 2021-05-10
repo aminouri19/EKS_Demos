@@ -1,0 +1,23 @@
+Setup NodePort Service
+
+1- Create a namespace
+*	kubectl create ns project1
+
+2- Create kubernetes pod from nginx image
+*	kubectl run nginx --image=nginx --port=80 -n project1
+
+3- Create service and expose pod
+*	kubectl expose pod nginx --type=NodePort --name=nginx-service -n project1
+
+4- View services and ports assigned to service
+*	kubectl get service -n project1
+
+5- View running nodes and IP address
+*	kubectl get nodes -o wide
+
+6- Find node in AWS and add port to security group
+
+7- Paste IP address of the node with port number
+*	<Node IP Address>:<port number>
+
+

@@ -1,0 +1,54 @@
+Create EKS Cluster Using eksctl
+
+Option-1
+Create EKS cluster and managed node group using the following commands
+
+eksctl create cluster \
+--name EKS1 \
+--region us-west-2 \
+--version 1.18 \
+--nodegroup-name eks-cluster-workers \
+--node-type t3.medium \
+--nodes 2 \
+--nodes-min 2 \
+--nodes-max 2 \
+--with-oidc \
+--ssh-access \
+--ssh-public-key <your-key> \
+--managed \
+--enable-ssm
+
+----------------------------------------------------------------------------
+Option-2
+Create EKS cluster and Fargate worker nodes using the following commands
+
+eksctl create cluster \
+--name <cluster name> \
+--region <region> \
+--fargate
+
+-----------------------------------------------------------------------------
+Option-3
+Create an EKS cluster using yaml file
+
+eksctl create cluster --config-file=EKS2-bottlerocket.yaml
+
+-------------------------------------------------------------------------
+To delete your cluster use the following command
+*	eksctl delete cluster --name my-cluster --region us-west-2
+
+---------------------------------
+demo command
+
+eksctl create cluster \
+--name EKS1 \
+--region us-west-2 \
+--version 1.18 \
+--nodegroup-name eks-cluster-workers \
+--node-type t3.medium \
+--nodes 2 \
+--nodes-min 2 \
+--nodes-max 2 \
+--with-oidc \
+--managed \
+--enable-ssm

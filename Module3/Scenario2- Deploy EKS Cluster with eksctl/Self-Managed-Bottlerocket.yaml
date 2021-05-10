@@ -1,0 +1,37 @@
+---
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: EKS2
+  region: us-west-2
+  version: '1.19'
+
+iam:
+  withOIDC: true
+
+nodeGroups:
+  - name: x86-bottlerocket-mng
+    instanceType: m5.large
+    desiredCapacity: 2
+    minSize: 2
+    maxSize: 2
+    amiFamily: Bottlerocket
+    ami: ami-0acfc3fffaaa4e015
+    iam:
+       attachPolicyARNs:
+          - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+          - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+          - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+          - arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy
+       withAddonPolicies:
+         externalDNS: true
+         certManager: true
+    ssh:
+        allow: true
+        publicKeyPath: ~/.ssh/ec2_id_rsa.pub
+        enableSsm: true
+
+    labels: {role: worker}
+    tags:
+      nodegroup-role: worker   

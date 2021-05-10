@@ -1,0 +1,38 @@
+----------------------------------------------------------------
+Example 1 create nginx depolyment-replicaset-pod
+
+*	kubectl create deployment nginx-deploy --image=nginx 
+
+----------------------------------------------------------------------
+Example 2 create hello world application
+
+*       kubectl create deployment hello-minikube --image=gcr.io/google_containers/echoserver:1.4 
+
+-------------------------------------------------------------------------
+Example 3 create mongo depolyment-replicaset-pod
+
+*	kubectl create deployment mongo-deploy --image=mongo
+
+----------------------------------------------------------------------
+Optional
+
+--To run Kubectl and minikube commands as your own user, use the following commands--
+--Create .Kube Directory with right config--
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+----------------------------------------------------------------------------
+*********Run pod without creating a deployment manifest file
+
+kubectl run <deployment name> --image= <image file> --port=<Port to expose pods>
+
+kubectl run hello-minikube --image=gcr.io/google-samples/hello-app:1.0 --port=8080
+
+kubectl run my-nginx --image=nginx --replicas=2 --port=80
+
+*********Creat and expose Service
+
+kubectl expose deployment hello-minikube --type=LoadBalancer --port=8000 --target-port:8080
+
+kubectl get services

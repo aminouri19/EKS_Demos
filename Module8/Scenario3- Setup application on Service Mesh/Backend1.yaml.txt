@@ -1,0 +1,67 @@
+---
+#################################################
+# ConfigMap for index.html for backend v1
+#################################################
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-cm-v1
+data:
+  index.html: |
+    <body bgcolor="green">
+      <center>
+        <h1><font color="yellow">This is the first backend server</font></h1>
+        <h1><font color="yellow">V1</font></h1>
+      </center>
+    </body>
+---
+#################################################
+# Service: backend
+#################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  labels:
+    app: backend
+spec:
+  ports:
+  - name: http
+    port: 80
+  selector:
+    app: backend
+---
+#################################################
+# Deployment: backend v1
+#################################################
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-v1
+  labels:
+    app: backend
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: backend
+        version: v1
+    spec:
+      containers:
+      - image: nginx
+        name: nginx
+        volumeMounts:
+        - name: index-html
+          mountPath: /usr/share/nginx/html
+        ports:
+        - containerPort: 80
+      volumes:
+      - name: index-html
+        configMap:
+          name: backend-cm-v1

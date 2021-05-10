@@ -1,0 +1,19 @@
+Processes that run when creating a cluster using eksctl
+
+1- Creating network components
+*	Create new vpc
+*	Create Subnets
+*	Create Route tables
+*	Create Internet Gateway
+*	Create NAT Gateway
+
+2- Create an IAM role
+*	A role to create the cluster
+*	A role to execute pods in Fargate
+Ref: https://docs.aws.amazon.com/eks/latest/userguide/fargate-getting-started.html#fargate-sg-pod-execution-role
+
+3- Create EKS cluster control plane
+
+4- Create Fargate profiles
+
+5- Create Kubeconfig file

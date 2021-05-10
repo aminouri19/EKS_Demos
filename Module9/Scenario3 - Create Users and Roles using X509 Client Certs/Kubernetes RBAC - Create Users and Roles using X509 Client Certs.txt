@@ -1,0 +1,99 @@
+Kubernetes RBAC - Create Users and Roles using X509 client certs
+
+
+1- Login using root after setting password for root
+*	sudo passwd root
+*	su root
+
+2- Create User
+*	adduser Jean
+
+3- Move into Jean's home folder
+*	cd /home/jean
+
+4- Create private key for user jean
+*	openssl genrsa -out jean.key 2048
+ 
+5- Create a certificate signing request
+*	openssl req -new -key jean.key -out jean.csr -subj "/CN=jean/O=finance"
+
+6- Using kubernetes ca.crt file, we sign jean's csr to get the public cert called jean.crt
+*	openssl x509 -req -in jean.csr -CA /root/.minikube/ca.crt -CAkey /root/.minikube/ca.key -CAcreateserial -out jean.crt -days 500
+
+Tip1: In minikube, login using root and this file is located in ~/.minikube (/root/.minikube/ca.crt)
+Tip2: In Kubernetes, this file is located in /etc/kubernetes/pki
+
+7- Create a hidden directory for jean and store the public and private keys in it
+*	mkdir .certs && mv jean.crt jean.key .certs
+
+Tip: Kubernetes config file is located in the ~/.kube directory. Adding new users adds an entry in this file
+
+8- Find your kubernetes cluster name and server http address
+*	kubectl config view
+
+9- Create kubeconfig file for john. This file is required for authentication and access to the cluster
+*	kubectl --kubeconfig jean.kubeconfig config set-cluster <cluster name> --server <server http address> --certificate-authority=/root/.minikube/ca.crt
+
+10- Add the user to the kubeconfig file
+*	kubectl --kubeconfig jean.kubeconfig config set-credentials jean --client-certificate=/home/jean/.certs/jean.crt --client-key=/home/jean/.certs/jean.key
+
+11- Create a context for the user
+*	kubectl --kubeconfig jean.kubeconfig config set-context jean-context --cluster=kubernetes --user=jean
+
+12- Copy the ca.crt file to jean's .certs hidden folder
+*	cp /root/.minikube/ca.crt /home/jean/.certs
+
+13- Edit the jean.kubeconfig file and change the following values
+*	certificate-authority: .certs/ca.crt
+*	current-context: jean-context
+
+14- grant all the created files and directories to the user
+*	chown -R jean: /home/jean/
+
+15- Login with Jean
+*	su jean
+
+16- Create a hidden kube directory and create the config file in it
+*	mkdir .kube
+*	mv jean.kubeconfig .kube/config
+
+17- Move the hidden .certs folder to .kube
+*	mv .certs .kube
+
+18- Create two namespaces
+*	kubectl create ns my-project-dev
+*	kubectl create ns my-project-prod
+
+19- Create role that allows "get" and "list" to "pods" in "my-project-dev"
+*	kubectl create role get-list-pods-dev --verb=get,list --resource=pods --namespace=my-project-dev
+
+20- view the role that was created.
+*	kubectl get role get-list-pods-dev -o yaml -n my-project-dev
+
+21- Bind new role to Jean using a rolebinding
+*	kubectl create rolebinding get-list-pods-dev-jean --role=get-list-pods-dev --user=jean --namespace my-preoject-dev
+
+22- View the rolebinding
+*	kubectl get rolebinding get-list-pods-dev-jean -o yaml -n my-project-dev
+
+23- Login with user jean and use the following command to see no resources have been found.
+*	kubectl get pods -n my-project-dev
+
+24- provide more permissions for Jean. Edit the role that was created.
+*	kubectl edit role get-list-pods-dev -n my-project-dev
+
+25- Add deployment and service to the list of resources accessible to jean. Add * in the api group section. Run the following commands
+*	kubectl get services -n my-project-dev
+*	kubectl get deployments -n my-project-dev
+
+26- To provide full control, place an * in the resources, apiGroups and verbs section
+
+27- If another user is created in the same group (e.g finance is the group in "/CN=jean/O=finance"), 
+make sure to bind the role to the group not a single user
+*	kubectl create rolebinding get-list-pods-dev-finance --role=get-list-pods-dev --group=finance --namespace my-preoject-dev
+
+
+Ref:https://www.adaltas.com/en/2019/08/07/users-rbac-kubernetes/
+
+
+

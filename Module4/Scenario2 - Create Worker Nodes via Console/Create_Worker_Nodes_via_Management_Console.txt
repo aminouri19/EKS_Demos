@@ -1,0 +1,28 @@
+Create Worker Nodes via Management Console
+
+1- Create IAM role for worker nodes
+	* Open IAM
+	* Create Role
+	* Select EC2, add the following policies
+		- AmamzonEKS_CNI_Policy
+		- AmazonEKSWorkerNodePolicy
+		- AmazonEC2ContainerRegistryReadOnly
+                - AmazonSSMManagedInstanceCore
+                - CloudWatchAgentServerPolicy
+	* Name the role "EKS_Worker_Node_Role"
+
+2- Open EKS cluster, select "Configuration tab", then select the "Compute" tab and click "Add node Group"
+
+3- Provide a name like "EKS_Worker_Node_Group"
+
+4- Select the role that we created on step 1
+
+5- Specify if you want to login to worker nodes or not and specify security group
+
+6- Specify node AMI and ec2 instance type and specify autoscaling and click create.
+
+7- Run kubectl get nodes. (If nodes are running, we can see the results)
+
+8- Deploy your nginx web application and test connectivity.
+
+ 

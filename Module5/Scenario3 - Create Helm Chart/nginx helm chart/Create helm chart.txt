@@ -1,0 +1,34 @@
+Create helm chart
+
+1- Create new chart
+*	helm create myapp
+
+2- Delete sample files
+*	rm -rf myapp/templates
+*	rm myapp/Chart.yaml
+*	rm myapp/values.yaml
+
+3- Run the following command to create a new chart file
+cat <<EoF > myapp/Chart.yaml
+apiVersion: v2
+name: eksdemo
+description: A helm chart for nginx
+version: 0.1.0
+appVersion: 1.0
+EoF
+
+4- Create directories for deployment and service manifests
+*	mkdir -p myapp/templates/deployment
+*	mkdir -p myapp/templates/service
+
+5- Create your manifest files under the directories
+*	nano myapp/templates/deployment/deployment.yaml
+*	nano myapp/templates/service/service.yaml
+
+6- Test templates
+*	helm install --debug --dry-run workshop ./myapp/
+
+7- Deploy chart
+*	helm install workshop ./myapp/ --set service.type=LoadBalancer
+
+

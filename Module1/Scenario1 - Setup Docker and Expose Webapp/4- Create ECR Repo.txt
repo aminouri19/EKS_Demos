@@ -1,0 +1,18 @@
+Create ECR Repository
+
+1- In AWS, search for ECR and create a "private" repository 
+
+2- Use one of the following methods to allow your instance to talk with ECR.
+	a- Run aws configure and enter your keys and region 
+	*	aws configure
+	b- Attach a role to your instance to allow access to ECR
+	*	Use the "EC2-ECR-Full-Access" role
+
+3- Tag your Image - Add ECR URI at the end of the command
+*	docker tag webserver:v1 <ECR URI>
+
+4- Copy the ECR URI and paste at the end of this command and run - You should see "login succeeded" at the end
+*	aws ecr get-login-password --region us-west-1 | docker login --username AWS --password-stdin <ECR URI>
+
+5- Push the image to ECR
+*	docker push <ECR URI>

@@ -1,0 +1,27 @@
+Create a T3.Large EC2 instance to have enough resources to run minikube
+
+sudo apt-get update -y
+
+curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
+
+chmod +x ./kubectl
+
+sudo mv ./kubectl /usr/local/bin/kubectl 
+
+--install docker--
+sudo apt-get install docker.io -y 
+
+--Install Minikube--
+curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
+
+--Install Kubernetes conntrack
+sudo apt-get install -y conntrack
+
+--Check Minikube Version--
+minikube version
+
+--Running Minikube on EC2 Ubuntu--
+sudo -i
+minikube start --vm-driver=none
+minikube status
+

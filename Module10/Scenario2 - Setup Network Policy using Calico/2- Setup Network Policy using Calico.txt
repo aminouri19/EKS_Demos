@@ -1,0 +1,50 @@
+Setup Network Policy using Calico
+
+1- Install Calico
+
+2- Verify Calico is running
+*	kubectl get ds -A
+
+3- Verify you have access to your publicly accessible nginx service
+*	kubectl get service nginx -n web
+
+4- Copy the value of the External-IP and paste it in browser. You should see the nginx welcome page
+
+5- Apply a network policy to deny traffic to all objects in the web namespace
+*	kubectl apply -f deny-all-traffic.yaml
+
+The deny-all traffic.yaml file looks like the following
+
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny
+  namespace: web
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+
+6- Load the nginx page and see that it fails now
+
+7- Create a second network policy to allow network traffic to the nginx pod
+*	kubectl apply -f allow-external-web-access.yaml
+
+The allow-external-web-access.yaml config file looks like the following
+
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: nginx-allow-external
+  namespace: web
+spec:
+  podSelector:
+    matchLabels:
+      app: nginx
+  ingress:
+  - ports:
+    - port: 80
+    from: []
+
+8- Load the nginx page and see that it now works again

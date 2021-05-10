@@ -1,0 +1,9 @@
+Install Kubernetes Metrics Server
+
+1- Deploy using the following command
+*	kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+
+2- Verify the metrics server is running the desired number of pods
+*	kubectl get deployment metrics-server -n kube-system
+
+Ref: https://docs.aws.amazon.com/eks/latest/userguide/metrics-server.html

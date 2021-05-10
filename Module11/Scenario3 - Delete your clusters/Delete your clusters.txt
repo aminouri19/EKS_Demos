@@ -1,0 +1,10 @@
+Delete your clusters
+
+1- List all services to identify all LoadBalancer and NodePort services
+*	kubectl get svc --all-namespaces
+
+2- Delete these frontend services
+*	kubectl delete svc <service-name>
+
+3- Use the following command to delete your clusters
+*	eksctl delete cluster --name <Cluster Name>	

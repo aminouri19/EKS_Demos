@@ -1,0 +1,6 @@
+Update Managed Worker Nodes
+
+1- Disable cluster autoscaler
+*	kubectl scale deployments/cluster-autoscaler --replicas=0 -n kube-system
+
+2- Update managed node group in console

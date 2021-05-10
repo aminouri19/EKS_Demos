@@ -1,0 +1,11 @@
+Install Calico
+
+1- Install Calico
+*	kubectl apply -f https://raw.githubusercontent.com/aws/amazon-vpc-cni-k8s/master/config/master/calico-operator.yaml
+*	kubectl apply -f https://raw.githubusercontent.com/aws/amazon-vpc-cni-k8s/master/config/master/calico-crs.yaml
+
+2- Verify calico is installed
+*	kubectl get ds -A
+
+Tip: You must see the calico-node running
+

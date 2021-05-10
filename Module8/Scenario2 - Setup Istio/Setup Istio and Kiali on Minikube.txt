@@ -1,0 +1,79 @@
+Setup Istio on minikube
+
+1- To setup Istio, we will need more resources on minikube. Us the following command
+*	minikube start --cpus 6 --memory 8192
+
+2- Download latest istio release package
+*	curl -L https://istio.io/downloadIstio | sh -
+
+https://istio.io/latest/docs/setup/getting-started/
+
+3- Move to the Istio package directory
+*	cd istio-1.9.1
+
+4- Move istioctl to correct location
+*	sudo cp bin/istioctl ~/bin
+
+5- Add the istioctl client to your path
+*	export PATH=$PWD/bin:$PATH
+
+6- Install Istio
+*	istioctl install
+
+tip1: Use "kubectl get ns" to see a new namespace called "istio-system" has been cretaed.
+tip2: Use "kubectl get pods -n istio-system" to view the IngressGateway pod and the Istiod control plane pod
+
+7- Create a namespace
+*	kubectl create ns project1
+
+8- View namespace labels
+*	kubectl get namespace project1 --show-labels
+
+9- Add a namespace label to instruct Istio to automatically inject Envoy sidecar proxies when you deploy your application later:
+*	kubectl label namespace project1 istio-injection=enabled
+
+tip: Verify label has been added using "kubectl get ns project1 --show-labels"
+
+10- Deploy your application in the namespace 
+*	kubectl apply -f manifest.yaml -n project1
+
+11- Use the following command to observe we have two containers vs one container
+*	kubectl get pods -n project1
+
+12- Use the following command to view the istio details
+*	kubectl describe pod <podid>
+
+To view metrics data from containers in the pod we must install addons in the cluster. The following addons can be added here.
+*	grafana
+*	Jaeger
+*	Kiali
+*	Prometheus
+
+Tip: Inside the istio folder, we have a folder called samples. Inside samples find the addons folder to view all addons.
+
+13- To install all addons use the following command
+*	kubectl apply -f istio-1.9.0/samples/addons
+
+14- Confirm new pods for addons are created
+*	kubectl get pod -n istio-system
+*	kubectl get service -n istio-system
+
+15- setup kiali by making it availabe through localhost
+*	kubectl get service kiali -n istio-system -o yaml
+
+16- Copy the Yaml code and past inside a file called kiali.yaml
+
+17- Edit the file and change type to LoadBalancer at the end of the yaml file.
+
+18- Apply the yaml file so the service will be accessible through the internet.
+
+19- Open port 20001 and connect using the following
+*	<load balancer URL>:20001
+
+
+
+
+
+
+
+

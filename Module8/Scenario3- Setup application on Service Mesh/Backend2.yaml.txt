@@ -1,0 +1,52 @@
+---
+#################################################
+# ConfigMap for index.html for backend v2
+#################################################
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-cm-v2
+data:
+  index.html: |
+    <body bgcolor="gray">
+      <center>
+        <h1>This is the second backend server</h1>
+        <h1>V2</h1>
+      </center>
+    </body>
+---
+#################################################
+# Deployment: backend v2
+#################################################
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-v2
+  labels:
+    app: backend
+    version: v2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: backend
+        version: v2
+    spec:
+      containers:
+      - image: nginx
+        name: nginx
+        volumeMounts:
+        - name: index-html
+          mountPath: /usr/share/nginx/html
+        ports:
+        - containerPort: 80
+      volumes:
+      - name: index-html
+        configMap:
+          name: backend-cm-v2

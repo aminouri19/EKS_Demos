@@ -1,0 +1,41 @@
+Allow IAM User Access to EKS Namespace
+In this scenario, the IAM user bob will have access to manage pods in the ns1 namespace
+
+1- Create IAM user bob
+
+2- Save credential file containing keys
+
+3- Create a namespace named ns1
+*	kubectl create namespace ns1
+
+4- Using the kubernetes admin user, create a role with full permission
+*	kubectl create role pod-admins --verb=* --resource=pods --namespace=ns1
+
+5- Create a role binding between role and user bob and group pod-admins
+*	kubectl create rolebinding pod-admins-binding --role=pod-admins --user=bob --group=pod-admins --namespace=ns1
+
+6- Using the Kubernetes admin user, edit the aws-auth file
+*	kubectl edit configmap aws-auth -n kube-system
+
+7- Add the following for bob in the config file and save. Do not paste, just type
+
+mapUsers: |
+  - userarn: arn:aws:iam::XXXXXXXXXXXX:user/bob
+    username: bob
+    groups:
+      - pod-admins
+
+8- login using bob
+*	aws configure --profile bob
+*	export AWS_DEFAULT_PROFILE=bob
+
+9- Use the AWS sts command to verify logged in user
+*	aws sts get-caller-identity
+
+Tip: If different users use the jumpbox, repeat step 9 for each user.
+
+10- Run the following commands
+	a- View all the pods. This command should succeed
+	*	kubectl get pods -n ns1
+	b- view all services. This command should not succeed
+	*	kubectl get services -n ns1

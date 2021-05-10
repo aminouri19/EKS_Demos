@@ -1,0 +1,32 @@
+Create EKS Cluster via Console
+
+1- Create IAM role
+	* Open IAM
+	* Create Role
+	* Select EKS, EKS cluster
+	* Select AmazonEKSClusterPolicy
+	* Name the role "CreateEKSClusterRole"
+
+2- Create a VPC for EKS using the Cloud Formation yaml file named amazon-eks-vpc-private-subnets.yaml
+https://amazon-eks.s3.us-west-2.amazonaws.com/cloudformation/2020-04-21/amazon-eks-vpc-private-subnets.yaml
+
+3- Create EKS Cluster by searching for EKS in services and creating stack
+
+4- Create an ec2 instance as your Bastion Host. Use AWS Configure to authenticate and verify
+*	aws configure
+*	aws iam list-users
+
+5- Install AWS IAM Authenticator on your Bastionhost using the following URL as guid.
+https://docs.aws.amazon.com/eks/latest/userguide/install-aws-iam-authenticator.html
+
+6- Install Kubectl 
+*	curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.18.9/2020-11-02/bin/linux/amd64/kubectl
+*	chmod +x ./kubectl
+*	mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
+*	kubectl version --short --client
+
+7- Setup your kubeconfig file
+*	aws eks --region us-west-2 update-kubeconfig --name EKS2-Oregon
+
+8- Create environment variable
+*	export KUBECONFIG=~/.kube/config

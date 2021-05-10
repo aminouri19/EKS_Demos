@@ -1,0 +1,21 @@
+Create nginx deployment and expose to Internet
+
+1- Create a namespace and call it web
+*	kubectl create namespace web
+
+2- Create nginx deployment
+*	kubectl create deployment nginx --image=nginx -n web
+*	kubectl create deployment webserverv1 --image=<webserverv1 URI> -n web
+
+3- Expose deployment
+*	kubectl expose deployment nginx --port=80 --target-port=80 --name nginx --type=LoadBalancer -n web
+*	kubectl expose deployment webserverv1 --port=80 --target-port=80 --name webserverv1 --type=LoadBalancer -n web
+
+4- View service details
+*	kubectl get service nginx -n web
+*	kubectl get service webserverv1 -n web
+
+5- Copy value in front of External-IP and paste in browser. 
+
+Tip: A new classic load balancer will be created after we expose the deployment.
+ Simply copy the DNS name and paste in the browser to see you web application.

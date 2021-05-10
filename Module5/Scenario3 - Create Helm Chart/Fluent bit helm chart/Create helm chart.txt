@@ -1,0 +1,10 @@
+Create helm chart
+
+1- Add Amazon eks chart repo to local host
+*	helm repo add eks https://aws.github.io/eks-charts
+
+2- Search for the application to install
+*	helm search repo eks fluent
+
+3- Install the application
+*	helm install aws-for-fluent-bit --namespace kube-system eks/aws-for-fluent-bit

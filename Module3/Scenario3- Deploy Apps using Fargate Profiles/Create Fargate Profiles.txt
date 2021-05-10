@@ -1,0 +1,45 @@
+Create Fargate profiles
+
+1- Create a new namespace
+*	kubectl create namespace games
+
+Option1 - Create Fargate profile using the GUI
+*	Open the Amazon EKS console 
+*	Choose the cluster to create a Fargate profile for.
+*	Under Fargate profiles, choose Add Fargate profile.
+
+
+Option2 - Create Fargate profiles using cli
+
+2- Create fargate profile
+eksctl create fargateprofile \
+    --cluster EKS1 \
+    --name games-profile \
+    --namespace games \
+    --labels gamingpod=true
+
+3- Inside the deployment file, add the following label for the pod
+*	gamingpod: true
+
+4- Apply the deployment file in the default namespace
+*	kubectl apply -f deployment.yaml
+
+5- Apply the deployment file in the games namespace
+*	kubectl apply -f deployment.yaml -n games
+
+6- Verify the new pod is running on fargate
+*	kubectl get pods -n games
+*	kubectl describe pod <pod name> -n games
+
+7- Verify new nodes
+*	kubectl get nodes
+
+--------------------
+Command reference
+
+eksctl create fargateprofile \
+    --cluster <cluster_name> \
+    --name <fargate_profile_name> \
+    --namespace <kubernetes_namespace> \
+    --labels <key=value>
+

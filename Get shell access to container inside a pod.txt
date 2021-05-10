@@ -1,0 +1,7 @@
+Get shell access to container inside a pod
+
+1- View all pods
+*	kubectl get pods
+
+2- Get shell access
+*	kubectl exec --stdin --tty <pod name> -- /bin/bash

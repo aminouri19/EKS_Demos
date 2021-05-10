@@ -1,0 +1,40 @@
+Setup Bastion host
+
+1- Create an ec2 instance using the following role. 
+*	EC2-ECR-Full-Access
+
+2- Add personal keys for authentication
+*	aws configure --profile amin
+*	export AWS_DEFAULT_PROFILE=amin
+
+3- Use the AWS sts command to verify logged in user
+*	aws sts get-caller-identity
+
+4- Authenticate with ECR. Copy the ECR URI and paste at the end of this command and run - You should see "login succeeded" at the end
+*	aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin <ECR URI>
+
+5- Install AWS IAM Authenticator on your Bastionhost using the following URL as guid.
+https://docs.aws.amazon.com/eks/latest/userguide/install-aws-iam-authenticator.html
+
+6- Install Kubectl 
+*	curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.18.9/2020-11-02/bin/linux/amd64/kubectl
+*	chmod +x ./kubectl
+*	mv ./kubectl $HOME/bin/kubectl
+*	kubectl version --short --client
+
+7- Install eksctl
+*	curl --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz
+*	sudo mv eksctl /usr/local/bin
+
+8- Setup your EKS cluster
+*	Use eksctl
+*	Use AWS dashboard
+
+-- Follow the next steps only if EKS was setup using the  dashboard install --
+
+9- Setup your kubeconfig file
+*	aws eks --region us-west-2 update-kubeconfig --name EKS2-Oregon
+
+10- Create environment variable
+*	export KUBECONFIG=~/.kube/config
+

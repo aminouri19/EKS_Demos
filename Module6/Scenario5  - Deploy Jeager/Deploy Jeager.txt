@@ -1,0 +1,28 @@
+Deploy Jeager
+
+After installing Istio, it's easy to setup Jeager as an Istio add-on.
+
+To view metrics data from containers in the pod we must install addons in the cluster. The following addons can be added here.
+*	grafana
+*	Jaeger
+*	Kiali
+*	Prometheus
+
+Tip: Inside the istio folder, we have a folder called samples. Inside samples find the addons folder to view all addons.
+
+12- To install all addons use the following command
+*	kubectl apply -f istio-1.9.0/samples/addons
+
+13- Confirm new pods for addons are created. We should see a pod called istio-tracing
+*	kubectl get pod -n istio-system
+
+14- Run the following command to see the Jeager service deployed
+*	kubectl get service -n istio-system
+
+15- Jeager service should be deployed as a clusterIP service so we can make it availabe through localhost
+*	kubectl port-forward svc/Jeager-query -n istio-system 16686
+*	Copy 127.0.0.1:16686 to your browser to see the web interface
+
+16- Continuesly connect to your web application and refresh to get some tracing data
+
+

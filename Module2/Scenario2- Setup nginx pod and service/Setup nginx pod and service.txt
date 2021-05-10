@@ -1,0 +1,15 @@
+Create nginx Pod and expose Service without Manifest File
+
+1- Create kubernetes pod from nginx image
+*	kubectl run nginx --image=nginx --port=80
+
+2- Create a Kuberntes pod from our ECR image repo
+*	kubectl run webserverv1 --image=<ECR Image URI> --port=80
+
+3- Create service and expose pod
+*	kubectl expose pod nginx --type=LoadBalancer --name=nginx-service
+*	kubectl expose pod webserverv1 --type=LoadBalancer --name=webserverv1-service
+
+4- Use minikube to assign public IP address to service
+*	minikube service nginx -n <namespace name>
+*	minikube service webserverv1 -n <namespace name>

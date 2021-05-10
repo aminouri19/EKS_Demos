@@ -1,0 +1,19 @@
+#Use Centos as base image
+FROM centos:latest AS build
+
+# Install nginx web server
+RUN yum install nginx -y
+
+# Create the index.html in the same path as Dockerfile to copy to container
+COPY src/index.html /usr/share/nginx/html
+
+#Run nginx in the forground
+CMD ["nginx", "-g", "daemon off;"]
+
+EXPOSE 80
+
+# Start second stage
+FROM nginx
+
+# Copy files from previous stage
+COPY --from=build /usr/share/nginx/html /usr/share/nginx/html

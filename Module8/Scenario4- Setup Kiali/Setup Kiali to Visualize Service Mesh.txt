@@ -1,0 +1,24 @@
+Setup Kiali to Visualize Service Mesh
+
+1- Create a username and password for Kiali
+*	KIALI_USERNAME=$(read -p 'kiali username= ' uval && echo -n $uval | base64)
+*	KIALI_PASSPHRASE=$(read -sp 'kiali password= ' pval && echo -n $pval | base64)
+
+2- set environment variable for namespace
+*	NAMESPACE=istio-system
+
+3- Create a kiali secret file
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kiali
+  namespace: $NAMESPACE
+  labels:
+    app: kiali
+type: Opaque
+data:
+  username: $KIALI_USERNAME
+  passphrase: $KIALI_PASSWORD
+EOF
+

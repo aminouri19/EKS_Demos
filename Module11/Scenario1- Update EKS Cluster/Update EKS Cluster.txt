@@ -1,0 +1,10 @@
+Update cluster
+
+1- Update first cluster using the management console
+
+2- Upgrade the second cluster using eksctl
+*	eksctl upgrade cluster --name EKS2 --approve
+or
+*	aws eks --region region-code update-cluster-version --name prod --kubernetes-version 1.19
+
+

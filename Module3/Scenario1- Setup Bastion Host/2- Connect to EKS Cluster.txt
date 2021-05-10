@@ -1,0 +1,15 @@
+1- Set environment variable
+*	export KUBECONFIG=~/.kube/config
+
+2- View current contexts
+*	kubectl config get-contexts
+
+3- Switch to context you want to work with
+*	kubectl config --kubeconfig=$KUBECONFIG use-context <Cluster context name>
+
+4- Add a new cluster to the kubeconfig file
+*	aws eks --region us-west-2 update-kubeconfig --name <Cluster name>
+
+5- Add personal keys for authentication
+*	aws configure --profile amin
+*	export AWS_DEFAULT_PROFILE=amin

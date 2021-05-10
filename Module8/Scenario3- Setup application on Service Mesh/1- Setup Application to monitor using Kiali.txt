@@ -1,0 +1,13 @@
+Setup application to monitor using Kiali
+
+1- Place the following files in the same directory 
+*	Frontend.yaml
+*	VirtualService.yaml
+*	Backend1
+*	Backend2
+
+2- Install all files
+*	kubectl create -f .
+
+3- View application using Kiali
+

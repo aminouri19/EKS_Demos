@@ -1,0 +1,49 @@
+Deploy Container Insights using QuickStart
+
+1- Add proper policy to the IAM role used by worker nodes using console or cli
+Option1- Add using console:
+*	Open EC2 dashboard
+*	Select instance, under security settings, click on role
+*	Add the "CloudWatchAgentServerPolicy" to the workers role
+
+Option2- Add using cli:
+*	aws iam attach-role-policy --policy-arn arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy --role-name <ManagedNodeGroupRole>
+
+
+2- Deploy cloud watch agent and fluentbit pods. (Select an option and run commands on your bastion host)
+Option1:
+
+ClusterName=<my-cluster-name>
+RegionName=<my-cluster-region>
+FluentBitHttpPort='2020'
+FluentBitReadFromHead='Off'
+[[ ${FluentBitReadFromHead} = 'On' ]] && FluentBitReadFromTail='Off'|| FluentBitReadFromTail='On'
+[[ -z ${FluentBitHttpPort} ]] && FluentBitHttpServer='Off' || FluentBitHttpServer='On'
+curl https://raw.githubusercontent.com/aws-samples/amazon-cloudwatch-container-insights/latest/k8s-deployment-manifest-templates/deployment-mode/daemonset/container-insights-monitoring/quickstart/cwagent-fluent-bit-quickstart.yaml | sed 's/{{cluster_name}}/'${ClusterName}'/;s/{{region_name}}/'${RegionName}'/;s/{{http_server_toggle}}/"'${FluentBitHttpServer}'"/;s/{{http_server_port}}/"'${FluentBitHttpPort}'"/;s/{{read_from_head}}/"'${FluentBitReadFromHead}'"/;s/{{read_from_tail}}/"'${FluentBitReadFromTail}'"/' | kubectl apply -f - 
+
+Option2:	
+a- Create a namespace for cloudwatch
+	*	kubectl apply -f https://raw.githubusercontent.com/aws-samples/amazon-cloudwatch-container-insights/latest/k8s-deployment-manifest-templates/deployment-mode/daemonset/container-insights-monitoring/cloudwatch-namespace.yaml
+	
+b- Create a service account in the cluster
+	*	kubectl apply -f https://raw.githubusercontent.com/aws-samples/amazon-cloudwatch-container-insights/latest/k8s-deployment-manifest-templates/deployment-mode/daemonset/container-insights-monitoring/cwagent/cwagent-serviceaccount.yaml
+
+c- Create a configmap for the cloudwatch agent
+	*	curl -O https://raw.githubusercontent.com/aws-samples/amazon-cloudwatch-container-insights/latest/k8s-deployment-manifest-templates/deployment-mode/daemonset/container-insights-monitoring/cwagent/cwagent-configmap.yaml
+
+d- Edit the downloaded yaml file. If using an EKS cluster remove the following section from the file
+	*	cluster_name={{cluster-name}}
+
+e- Apply config-map
+	*	kubectl apply -f cwagent-configmap.yaml
+
+f- Deploy cloudwatch agent as deamonset
+	*	kubectl apply -f https://raw.githubusercontent.com/aws-samples/amazon-cloudwatch-container-insights/latest/k8s-deployment-manifest-templates/deployment-mode/daemonset/container-insights-monitoring/cwagent/cwagent-daemonset.yaml
+
+g- If you don't want to use StatsD, use the following command
+	*	kubectl apply -f https://raw.githubusercontent.com/aws-samples/amazon-cloudwatch-container-insights/latest/k8s-deployment-manifest-templates/deployment-mode/daemonset/container-insights-monitoring/cwagent/cwagent-daemonset.yaml
+
+h- Validate the agent is deployed
+	*	kubectl get pods -n amazon-cloudwatch
+
+Ref: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Container-Insights-prerequisites.html

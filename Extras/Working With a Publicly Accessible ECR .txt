@@ -1,0 +1,19 @@
+Working With a Publicly Accessible ECR 
+
+1- Create a publicly accessible ECR repository in AWS
+
+2- Install AWS cli version 1.19 or above
+https://docs.aws.amazon.com/cli/latest/userguide/install-linux.html
+
+3- Authenticate to Public registry
+aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
+
+4- Tag your images
+*	docker tag webserver:v1 <ECR URI>:webserverv1
+
+5- Push Images
+*	docker push <ECR URI>:webserverv1
+
+6- Run containers using ECR public repositories
+*	docker run -t -i -p 80:80 public.ecr.aws/r6g9m2o3/news-blog:latest
+*	docker run -t -i -p 80:80 public.ecr.aws/aminouri/demos:webserverv2

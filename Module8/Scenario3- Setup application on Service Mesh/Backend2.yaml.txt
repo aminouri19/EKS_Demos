@@ -9,10 +9,9 @@ metadata:
   name: backend-cm-v2
 data:
   index.html: |
-    <body bgcolor="gray">
+    <body bgcolor="red">
       <center>
-        <h1>This is the second backend server</h1>
-        <h1>V2</h1>
+        <h1><font color="white">This is the first backend server</font></h1>
       </center>
     </body>
 ---

@@ -51,23 +51,26 @@ To view metrics data from containers in the pod we must install addons in the cl
 
 Tip: Inside the istio folder, we have a folder called samples. Inside samples find the addons folder to view all addons.
 
-13- To install all addons use the following command
+13- Install Kiali 
+*	kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.9/samples/addons/kiali.yaml
+
+14- To install all addons use the following command
 *	kubectl apply -f istio-1.9.0/samples/addons
 
-14- Confirm new pods for addons are created
+15- Confirm new pods for addons are created
 *	kubectl get pod -n istio-system
 *	kubectl get service -n istio-system
 
-15- setup kiali by making it availabe through localhost
+16- setup kiali by making it availabe through localhost
 *	kubectl get service kiali -n istio-system -o yaml
 
-16- Copy the Yaml code and past inside a file called kiali.yaml
+17- Copy the Yaml code and past inside a file called kiali.yaml
 
-17- Edit the file and change type to LoadBalancer at the end of the yaml file.
+18- Edit the file and change type to LoadBalancer at the end of the yaml file.
 
-18- Apply the yaml file so the service will be accessible through the internet.
+19- Apply the yaml file so the service will be accessible through the internet.
 
-19- Open port 20001 and connect using the following
+20- Open port 20001 and connect using the following
 *	<load balancer URL>:20001
 
 

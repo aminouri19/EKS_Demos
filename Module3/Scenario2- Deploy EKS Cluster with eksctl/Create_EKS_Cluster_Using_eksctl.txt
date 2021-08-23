@@ -44,7 +44,7 @@ eksctl create cluster \
 --name EKS1 \
 --region us-west-2 \
 --version 1.18 \
---nodegroup-name eks-cluster-workers \
+--nodegroup-name eks1-worker-nodes \
 --node-type t3.medium \
 --nodes 2 \
 --nodes-min 2 \

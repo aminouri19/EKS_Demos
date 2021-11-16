@@ -61,7 +61,7 @@ EXPOSE 80
 *	docker images
 
 18- Delete extra images downloaded from docker hub
-*	docker rmi images <Image Name>
+*	docker rmi <Image Name>
 
 19- Run the second image on port 80
 *	docker run -t -i -p 80:80 webserver:v2

@@ -1,24 +1,18 @@
 Setup Kiali to Visualize Service Mesh
 
-1- Create a username and password for Kiali
-*	KIALI_USERNAME=$(read -p 'kiali username= ' uval && echo -n $uval | base64)
-*	KIALI_PASSPHRASE=$(read -sp 'kiali password= ' pval && echo -n $pval | base64)
+1- kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.15/samples/addons/kiali.yaml
 
-2- set environment variable for namespace
-*	NAMESPACE=istio-system
+2- Install prometheous and other istio add ons
+*	cd istio-1.15.3/samples/addons
+*	kubectl apply -f .
 
-3- Create a kiali secret file
-cat <<EOF | kubectl apply -f -
-apiVersion: v1
-kind: Secret
-metadata:
-  name: kiali
-  namespace: $NAMESPACE
-  labels:
-    app: kiali
-type: Opaque
-data:
-  username: $KIALI_USERNAME
-  passphrase: $KIALI_PASSWORD
-EOF
+3- Edit the Kiali service from ClusterIP to LoadBalancer
+*	kubectl edit svc kiali -n istio-system
 
+4- Scroll to the bottom of the list and change ClusterIP to LoadBalancer. Save by hiting
+the escape key :wq! and enter.
+
+5- Copy the new Kiali url and paste to browser. Kilai usess port 20001 at the end of the URL
+*	kubectl get all -n istio-system
+
+6- Start producing traffic on the web application and the you can see the graph in Kiali

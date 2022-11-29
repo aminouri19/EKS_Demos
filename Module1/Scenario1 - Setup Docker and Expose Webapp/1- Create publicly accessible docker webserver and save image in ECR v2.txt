@@ -12,7 +12,8 @@
 5-Add the ec2-user to the docker group so you can execute Docker commands without using sudo
 *	sudo usermod -a -G docker ec2-user
 
-6- Close terminal and reopen for changes to take effect
+6- Close terminal and reopen for changes to take effect (or run this reset)
+* exec sg docker newgrp `id -gn`
 
 7-Verify that the ec2-user can run Docker commands without sudo
 *	docker info
